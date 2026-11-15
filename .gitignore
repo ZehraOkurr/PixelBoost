@@ -1,0 +1,37 @@
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/*/__pycache__/
+backend/*/*/__pycache__/
+*.pyc
+*.pyo
+
+# Storage & Temporary
+backend/temp/*
+backend/uploads/*
+backend/outputs/*
+!backend/temp/.gitkeep
+!backend/uploads/.gitkeep
+!backend/outputs/.gitkeep
+
+# Environment
+.env
+backend/.env
+
+# Large AI engine binaries and models
+ai-engine/*.exe
+ai-engine/*.dll
+ai-engine/*.mp4
+ai-engine/models/*.bin
+ai-engine/models/*.param
+!ai-engine/models/.gitkeep
+
+# Logs & OS
+*.log
+Thumbs.db
+.DS_Store
