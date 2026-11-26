@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Info, Wand2, Palette } from 'lucide-react';
+import { Sparkles, Wand2 } from 'lucide-react';
 import type { EnhanceSettingsState, Language, AIModelType } from '../types';
 import { translations } from '../i18n/translations';
 
@@ -31,7 +31,7 @@ export const EnhancementSettings: React.FC<EnhancementSettingsProps> = ({
         </h3>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {/* Upscale Factor Selection */}
         <div className="space-y-2">
           <label className="text-xs font-bold text-navy-900 uppercase tracking-wider">
@@ -79,30 +79,6 @@ export const EnhancementSettings: React.FC<EnhancementSettingsProps> = ({
             </button>
           </div>
         </div>
-
-        {/* Output Format */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-navy-900 uppercase tracking-wider">
-            {t.format_label}
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            {(['png', 'jpg'] as const).map((fmt) => (
-              <button
-                key={fmt}
-                type="button"
-                disabled={isProcessing}
-                onClick={() => onChange({ outputFormat: fmt })}
-                className={`p-3.5 rounded-2xl border text-center transition-all ${
-                  settings.outputFormat === fmt
-                    ? 'border-brand-500 bg-red-50/60 ring-2 ring-brand-500/20 font-bold text-brand-600'
-                    : 'border-slate-200 hover:border-slate-300 bg-slate-50/50 text-slate-700 font-semibold'
-                }`}
-              >
-                <span className="uppercase text-sm">{fmt}</span>
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Model Selection */}
@@ -110,7 +86,7 @@ export const EnhancementSettings: React.FC<EnhancementSettingsProps> = ({
         <label className="text-xs font-bold text-navy-900 uppercase tracking-wider">
           {t.model_label}
         </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3">
           {/* General Model */}
           <button
             type="button"
@@ -130,54 +106,47 @@ export const EnhancementSettings: React.FC<EnhancementSettingsProps> = ({
               {t.model_general_desc}
             </p>
           </button>
-
-          {/* Anime Model */}
-          <button
-            type="button"
-            disabled={isProcessing}
-            onClick={() => onChange({ model: 'realesrgan-x4plus-anime' as AIModelType })}
-            className={`p-4 rounded-2xl border text-left transition-all ${
-              settings.model === 'realesrgan-x4plus-anime'
-                ? 'border-brand-500 bg-red-50/60 ring-2 ring-brand-500/20'
-                : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'
-            }`}
-          >
-            <div className="flex items-center space-x-2 text-navy-900 font-bold text-sm">
-              <Palette className="w-4 h-4 text-brand-600" />
-              <span>{t.model_anime}</span>
-            </div>
-            <p className="text-xs text-slate-500 mt-1.5 leading-snug">
-              {t.model_anime_desc}
-            </p>
-          </button>
         </div>
       </div>
 
-      {/* Face Enhancement Toggle */}
-      <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 flex items-center justify-between">
-        <div className="space-y-0.5">
-          <span className="text-xs font-bold text-navy-900">{t.face_enhance}</span>
-          <p className="text-[11px] text-slate-500">{t.face_enhance_desc}</p>
+      {/* Minimum Output Height */}
+      <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5 pr-4">
+            <span className="text-xs font-bold text-navy-900">{t.min_height_label}</span>
+            <p className="text-[11px] text-slate-500">{t.min_height_desc}</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer shrink-0">
+            <input
+              type="checkbox"
+              checked={settings.minHeightEnabled}
+              disabled={isProcessing}
+              onChange={(e) => onChange({ minHeightEnabled: e.target.checked })}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
+          </label>
         </div>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={settings.faceEnhance}
-            disabled={isProcessing}
-            onChange={(e) => onChange({ faceEnhance: e.target.checked })}
-            className="sr-only peer"
-          />
-          <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
-        </label>
-      </div>
-
-      {/* AI Reconstruction Disclaimer */}
-      <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-4 flex items-start space-x-3 text-xs text-amber-900">
-        <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-        <div>
-          <span className="font-bold">{t.ai_disclaimer_title}:</span>{' '}
-          <span className="text-amber-800 leading-relaxed">{t.ai_disclaimer_text}</span>
-        </div>
+        {settings.minHeightEnabled && (
+          <div className="flex items-center space-x-2">
+            <input
+              type="number"
+              min={1}
+              max={8192}
+              step={1}
+              value={settings.minHeight}
+              disabled={isProcessing}
+              onChange={(e) => {
+                const value = Math.round(Number(e.target.value));
+                if (Number.isFinite(value)) {
+                  onChange({ minHeight: Math.min(Math.max(value, 1), 8192) });
+                }
+              }}
+              className="w-32 px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-navy-900 focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500"
+            />
+            <span className="text-xs font-semibold text-slate-500">px</span>
+          </div>
+        )}
       </div>
 
       {/* Start Button */}

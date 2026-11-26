@@ -110,26 +110,6 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
               {health?.gpu_info || 'NVIDIA GeForce RTX 4050 Laptop GPU (Vulkan Compute)'}
             </div>
           </div>
-
-          <div>
-            <label className="text-slate-400 font-semibold uppercase text-[10px] block mb-1">
-              Tespit Edilen Modeller
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {health?.models_available && health.models_available.length > 0 ? (
-                health.models_available.map((model) => (
-                  <span
-                    key={model}
-                    className="bg-red-50 text-brand-600 border border-red-100 px-3 py-1 rounded-lg font-mono text-[11px] font-bold"
-                  >
-                    {model}
-                  </span>
-                ))
-              ) : (
-                <span className="text-slate-400 italic">Henüz model algılanmadı.</span>
-              )}
-            </div>
-          </div>
         </div>
       </div>
 

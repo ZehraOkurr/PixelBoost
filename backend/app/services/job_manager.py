@@ -132,7 +132,8 @@ class JobManager:
                 scale=request.scale,
                 model_name=request.model_name,
                 output_format=ext,
-                timeout_seconds=settings.JOB_TIMEOUT_SECONDS
+                timeout_seconds=settings.JOB_TIMEOUT_SECONDS,
+                min_height=request.min_height
             )
 
             img_task.processing_time_ms = duration_ms

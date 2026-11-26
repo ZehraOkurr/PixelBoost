@@ -32,7 +32,7 @@ class EnhanceRequest(BaseModel):
     scale: int = Field(4, description="Upscale multiplier: 2 or 4")
     model_name: str = Field("realesrgan-x4plus", description="Model: 'realesrgan-x4plus' or 'realesrgan-x4plus-anime'")
     output_format: str = Field("png", description="Output format: 'png' or 'jpg'")
-    face_enhance: bool = Field(False, description="Enable face enhancement (if GFPGAN available)")
+    min_height: Optional[int] = Field(None, ge=1, le=8192, description="Minimum output height in pixels (aspect ratio is preserved)")
 
 class ImageResult(BaseModel):
     id: str

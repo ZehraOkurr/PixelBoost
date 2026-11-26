@@ -71,8 +71,7 @@ def run_test():
         "image_ids": [img1_id, img2_id],
         "scale": 4,
         "model_name": "realesrgan-x4plus",
-        "output_format": "png",
-        "face_enhance": False
+        "output_format": "png"
     }).encode()
 
     req = urllib.request.Request(

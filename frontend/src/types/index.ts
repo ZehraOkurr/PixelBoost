@@ -1,6 +1,6 @@
 export type Language = 'tr' | 'en';
 
-export type NavItem = 'dashboard' | 'enhancer' | 'history' | 'settings';
+export type NavItem = 'enhancer' | 'history' | 'settings';
 
 export interface UploadedImage {
   id: string;
@@ -15,13 +15,13 @@ export interface UploadedImage {
   localFile?: File;
 }
 
-export type AIModelType = 'realesrgan-x4plus' | 'realesrgan-x4plus-anime';
+export type AIModelType = 'realesrgan-x4plus';
 
 export interface EnhanceSettingsState {
   scale: 2 | 4;
   model: AIModelType;
-  outputFormat: 'png' | 'jpg';
-  faceEnhance: boolean;
+  minHeightEnabled: boolean;
+  minHeight: number;
 }
 
 export type JobStatus = 'queued' | 'processing' | 'completed' | 'failed' | 'cancelled';

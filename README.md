@@ -1,170 +1,170 @@
-# PixelBoost AI — Real AI-Powered Super Resolution Web App
+<p align="center">
+  <img src="frontend/public/logo.png" alt="PixelBoost AI" width="120" />
+</p>
 
-[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com)
-[![React](https://img.shields.io/badge/Frontend-React_19_%2B_Vite-61DAFB?style=flat-square&logo=react)](https://react.dev)
-[![Real-ESRGAN](https://img.shields.io/badge/AI_Engine-Real--ESRGAN_Vulkan-FF4F00?style=flat-square)](https://github.com/xinntao/Real-ESRGAN)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+<h1 align="center">PixelBoost AI</h1>
 
-**PixelBoost AI** is a production-grade, locally runnable AI super-resolution and image enhancement web application. It reconstructs and sharpens low-resolution photos, digital illustrations, and anime artworks using **official Real-ESRGAN NCNN Vulkan** neural networks with local hardware acceleration (NVIDIA GPU / Vulkan compute).
-
----
-
-## Key Features
-
-- **Real AI Upscaling**: Powered by the official pre-trained Real-ESRGAN models (`realesrgan-x4plus`, `realesrgan-x4plus-anime`, `realesr-animevideov3-x2`). **No mock or simulated AI processing.**
-- **Hardware-Accelerated (Vulkan)**: Uses local GPU compute (e.g., NVIDIA GeForce RTX 4050) without relying on expensive, privacy-invasive cloud APIs.
-- **2x & 4x Scaling**: Flexible upscaling factors for quick enhancement or maximum Ultra HD sharpness.
-- **Batch Processing**: Upload up to 20 images simultaneously; the backend queues and processes images sequentially to avoid VRAM exhaustion.
-- **Interactive Comparison Slider**: Side-by-side before/after split slider allowing horizontal wiping to inspect fine reconstructed details.
-- **Batch ZIP Export**: Single-click archive download containing all successfully enhanced images with formatted filenames.
-- **Security & Integrity**: Magic-byte inspection via Pillow, strict mime type and size validation, UUID file naming, and path-traversal prevention.
-- **Bilingual Interface**: Turkish by default with instant toggle to English.
-- **Modern SaaS Dashboard**: Sleek light/white aesthetic, dark navy typography, crimson accent colors, and subtle micro-animations.
+<p align="center">
+  Real-ESRGAN ile yerel GPU üzerinde çalışan yapay zekâ destekli görsel büyütme (süper çözünürlük) uygulaması.
+</p>
 
 ---
 
-## Architecture & Project Structure
+## Özellikler
+
+- **Gerçek AI büyütme:** Resmi `realesrgan-x4plus` modeli ile 2x ve 4x büyütme.
+- **Yerel çalışma:** Görseller hiçbir bulut servisine gönderilmez; işlem bilgisayarınızın GPU'sunda (Vulkan) yapılır.
+- **Minimum yükseklik:** Çıktının yüksekliği belirlenen değerden (varsayılan 768 px) küçükse, en-boy oranı korunarak bu yüksekliğe çıkarılır. Ayar arayüzden açılıp kapatılabilir ve değiştirilebilir.
+- **Toplu işlem:** Tek seferde 20 görsele kadar yükleme. Görseller GPU belleğini doldurmamak için sırayla işlenir.
+- **Önce / sonra karşılaştırma:** Kaydırmalı karşılaştırma ile detay farkını inceleme.
+- **ZIP indirme:** Bir işteki tüm sonuçları tek arşiv olarak indirme.
+- **Güvenli yükleme:** Dosya içeriği Pillow ile doğrulanır, dosyalar UUID ile adlandırılır, dizin dışına çıkma (path traversal) engellenir.
+- **İki dil:** Türkçe (varsayılan) ve İngilizce arayüz.
+
+## Kullanılan Teknolojiler
+
+| Katman | Teknoloji |
+|---|---|
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS, lucide-react |
+| Backend | Python, FastAPI, Uvicorn, Pydantic, Pillow |
+| AI motoru | [Real-ESRGAN ncnn Vulkan](https://github.com/xinntao/Real-ESRGAN) (`realesrgan-ncnn-vulkan.exe`) |
+
+## Proje Yapısı
 
 ```
 PixelBoost/
-├── frontend/                     # React + TypeScript + Vite + Tailwind CSS
-│   ├── src/
-│   │   ├── components/           # Dropzone, ImageQueue, ComparisonSlider, etc.
-│   │   ├── pages/                # Dashboard, Enhancer, History, Settings
-│   │   ├── services/             # API client
-│   │   ├── i18n/                 # Turkish & English translations
-│   │   └── types/                # TypeScript interface definitions
-│   └── vite.config.ts            # Dev server with /api proxy
-├── backend/                      # Python 3.13 / FastAPI Backend
+├── frontend/                 # React + TypeScript arayüz
+│   ├── public/               # Logo ve favicon
+│   └── src/
+│       ├── components/       # Dropzone, ayarlar paneli, karşılaştırma kaydırıcısı vb.
+│       ├── pages/            # Görsel İyileştirici, İşlem Geçmişi, Ayarlar
+│       ├── services/api.ts   # Backend istemcisi
+│       ├── i18n/             # Türkçe / İngilizce metinler
+│       └── types/            # TypeScript tipleri
+├── backend/                  # FastAPI sunucusu
 │   ├── app/
-│   │   ├── api/                  # /api/health, /upload, /enhance, /download
-│   │   ├── core/                 # Config & Security validation
-│   │   ├── models/               # Pydantic request/response schemas
-│   │   └── services/             # AI engine subprocess, Job manager, File service
-│   ├── uploads/                  # Temporary validated uploads
-│   ├── outputs/                  # Finished batch archives
-│   ├── temp/                     # Unique per-job working directories
+│   │   ├── api/              # health, upload, enhance, download uç noktaları
+│   │   ├── core/             # Ayarlar ve güvenlik kontrolleri
+│   │   ├── models/           # Pydantic şemaları
+│   │   └── services/         # AI motoru, iş kuyruğu, dosya işlemleri
+│   ├── tests/test_e2e.py     # Uçtan uca test
 │   └── requirements.txt
-├── ai-engine/                    # Portable Real-ESRGAN NCNN Vulkan distribution
-│   ├── realesrgan-ncnn-vulkan.exe
-│   └── models/                   # Official .bin and .param model pairs
-├── .env.example                  # Environment configuration template
-├── .gitignore
-└── README.md
+├── ai-engine/                # Real-ESRGAN programı ve modelleri (repoda yok, aşağıya bakın)
+├── start.bat / start.ps1     # Backend ve frontend'i birlikte başlatır
+└── .env.example
 ```
 
----
+## Gereksinimler
 
-## Prerequisites
+- Windows 10/11
+- Vulkan destekli bir ekran kartı (NVIDIA, AMD veya Intel)
+- Python 3.11 veya üzeri (3.13 ile test edildi)
+- Node.js 20.19+ veya 22+
 
-1. **Python 3.11+** (Tested on Python 3.13)
-2. **Node.js 18+** & **npm** (Tested on Node v22.20)
-3. **Vulkan-capable GPU** (NVIDIA, AMD, or Intel modern graphics driver)
+## Kurulum
 
----
-
-## Quick Start (Installation & Execution)
-
-### 1. Backend Setup
+### 1. Projeyi indirin
 
 ```bash
-# In the repository root:
-cd backend
-
-# Create virtual environment (if not already created)
-python -m venv .venv
-
-# Activate virtual environment:
-# Windows (PowerShell):
-.\.venv\Scripts\Activate.ps1
-# Windows (CMD):
-.\.venv\Scripts\activate.bat
-
-# Install dependencies:
-pip install -r requirements.txt
-
-# Start the FastAPI server on port 8000:
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+git clone https://github.com/ZehraOkurr/PixelBoost.git
+cd PixelBoost
 ```
 
-The backend API will be available at `http://127.0.0.1:8000` (Interactive Swagger docs: `http://127.0.0.1:8000/docs`).
+### 2. AI motorunu ekleyin
 
-### 2. Frontend Setup
+AI motoru ve model dosyaları boyutları nedeniyle repoya dahil değildir.
 
-In a separate terminal:
+1. [Real-ESRGAN Releases](https://github.com/xinntao/Real-ESRGAN/releases) sayfasından `realesrgan-ncnn-vulkan-...-windows.zip` dosyasını indirin.
+2. Zip içeriğini `ai-engine/` klasörüne çıkarın. Sonuç şöyle görünmelidir:
+
+```
+ai-engine/
+├── realesrgan-ncnn-vulkan.exe
+├── vcomp140.dll
+└── models/
+    ├── realesrgan-x4plus.bin
+    └── realesrgan-x4plus.param
+```
+
+### 3. Backend
+
+```bash
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 4. Frontend
 
 ```bash
 cd frontend
-
-# Install packages
 npm install
+```
 
-# Run Vite development server
+## Çalıştırma
+
+Proje kök klasöründe `start.bat` dosyasını çalıştırın. Backend ve frontend ayrı pencerelerde açılır, tarayıcı otomatik olarak uygulamayı açar.
+
+Elle başlatmak isterseniz:
+
+```bash
+# 1. terminal
+cd backend
+.venv\Scripts\activate
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+
+# 2. terminal
+cd frontend
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173` in your browser.
+| Adres | Açıklama |
+|---|---|
+| http://127.0.0.1:5173 | Uygulama arayüzü |
+| http://127.0.0.1:8000/docs | API dokümantasyonu (Swagger) |
 
----
+## Ayarlar
 
-## AI Engine Configuration
+Sunucu ayarları `backend/app/core/config.py` dosyasındadır:
 
-The backend is configured via `.env` (or environment variables):
-
-```ini
-# AI Engine executable path
-AI_ENGINE_PATH=ai-engine/realesrgan-ncnn-vulkan.exe
-
-# Models folder containing .bin and .param files
-AI_MODELS_PATH=ai-engine/models
-
-# GPU Device ID (0 = first GPU, 1 = second/dedicated GPU, -1 = CPU)
-AI_GPU_ID=1
-
-# Upload & Job Limits
-UPLOAD_MAX_SIZE_MB=50
-MAX_BATCH_SIZE=20
-JOB_TIMEOUT_SECONDS=600
-AUTO_CLEANUP_HOURS=24
-```
-
----
-
-## API Endpoints Reference
-
-| Method | Endpoint | Description |
+| Ayar | Varsayılan | Açıklama |
 |---|---|---|
-| `GET` | `/api/health` | Check engine availability, model list, GPU device, and status |
-| `POST` | `/api/upload` | Upload multiple images (validated via PIL header verification) |
-| `GET` | `/api/preview/{image_id}` | Preview uploaded original image |
-| `POST` | `/api/enhance` | Start async sequential enhancement job (`scale`, `model_name`, etc.) |
-| `GET` | `/api/jobs/{job_id}` | Poll real-time job progress (percent, completed/failed count) |
-| `GET` | `/api/jobs/{job_id}/results`| Retrieve before/after dimensions, sizes, and file URLs |
-| `GET` | `/api/download/{image_id}` | Download an individual upscaled image |
-| `GET` | `/api/download-zip/{job_id}`| Download all successfully upscaled batch images in a ZIP archive |
-| `DELETE`| `/api/jobs/{job_id}` | Delete temporary files and job cache |
+| `AI_GPU_ID` | `1` | Kullanılacak ekran kartının numarası |
+| `UPLOAD_MAX_SIZE_MB` | `50` | Dosya başına en büyük boyut |
+| `MAX_BATCH_SIZE` | `20` | Tek seferde yüklenebilecek görsel sayısı |
+| `JOB_TIMEOUT_SECONDS` | `600` | Bir görsel için en uzun işlem süresi |
 
----
+Desteklenen formatlar: JPG, JPEG, PNG, WEBP. Çıktılar PNG olarak kaydedilir.
 
-## Automated End-to-End Testing
+## API
 
-You can run the full automated test suite verifying uploads, real GPU AI upscaling, dimension accuracy, and ZIP extraction:
+| Yöntem | Uç nokta | Açıklama |
+|---|---|---|
+| GET | `/api/health` | AI motoru ve model durumu |
+| POST | `/api/upload` | Görsel yükleme (çoklu dosya) |
+| GET | `/api/preview/{image_id}` | Yüklenen görselin önizlemesi |
+| POST | `/api/enhance` | Büyütme işini başlatır |
+| GET | `/api/jobs/{job_id}` | İş durumu ve ilerleme |
+| GET | `/api/jobs/{job_id}/results` | İşin sonuçları |
+| DELETE | `/api/jobs/{job_id}` | İşi ve geçici dosyalarını siler |
+| GET | `/api/download/{image_id}` | Büyütülmüş görseli indirir |
+| GET | `/api/download-zip/{job_id}` | Tüm sonuçları ZIP olarak indirir |
+
+## Teknik Not: 2x Büyütme
+
+`realesrgan-x4plus` modeli yalnızca 4x için eğitilmiştir ve doğrudan 2x çalıştırıldığında görüntü parçaları kayar. Bu yüzden 2x seçildiğinde model 4x çalıştırılır, sonuç Lanczos yöntemiyle 2x boyuta indirilir. Minimum yükseklik ayarı da aynı adımda uygulanır.
+
+## Test
+
+Backend çalışırken, proje kök klasöründen:
 
 ```bash
-.\backend\.venv\Scripts\python.exe backend/tests/test_e2e.py
+python backend/tests/test_e2e.py
 ```
 
----
+Test `ai-engine/input.jpg` dosyasını kullanır.
 
-## Security & Privacy
+## Teşekkür
 
-- **100% Offline Processing**: Images never leave your local machine.
-- **Sanitized Filenames & UUIDs**: Eliminates directory traversal vectors.
-- **Deep File Verification**: Pillow `.verify()` checks actual image binary structure, not just file extensions.
-- **No `shell=True`**: All subprocess invocations pass explicit arguments directly to the Windows API.
-
----
-
-## License
-
-MIT License. Real-ESRGAN and NCNN are licensed under BSD 3-Clause and Apache 2.0 respectively.
+Görsel büyütme [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) (Xintao Wang ve ark.) projesine dayanır.

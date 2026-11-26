@@ -36,12 +36,35 @@ export const EnhancerPage: React.FC<EnhancerPageProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const [settings, setSettings] = useState<EnhanceSettingsState>({
-    scale: 4,
-    model: 'realesrgan-x4plus',
-    outputFormat: 'png',
-    faceEnhance: false
+  const [settings, setSettings] = useState<EnhanceSettingsState>(() => {
+    const defaults: EnhanceSettingsState = {
+      scale: 4,
+      model: 'realesrgan-x4plus',
+      minHeightEnabled: true,
+      minHeight: 768
+    };
+    try {
+      const saved = JSON.parse(localStorage.getItem('pixelboost_min_height') || 'null');
+      if (saved && typeof saved.minHeight === 'number') {
+        return { ...defaults, minHeightEnabled: !!saved.minHeightEnabled, minHeight: saved.minHeight };
+      }
+    } catch {
+      // ignore unavailable or corrupt storage
+    }
+    return defaults;
   });
+
+  // Remember the minimum height preference between sessions
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        'pixelboost_min_height',
+        JSON.stringify({ minHeightEnabled: settings.minHeightEnabled, minHeight: settings.minHeight })
+      );
+    } catch {
+      // ignore unavailable storage
+    }
+  }, [settings.minHeightEnabled, settings.minHeight]);
 
   const [activeJob, setActiveJob] = useState<Job | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);

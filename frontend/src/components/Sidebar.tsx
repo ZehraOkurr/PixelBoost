@@ -1,12 +1,10 @@
 import React from 'react';
 import {
-  LayoutDashboard,
   Wand2,
   History,
   Settings as SettingsIcon,
   Cpu,
   Globe,
-  Sparkles,
   AlertTriangle,
   CheckCircle2
 } from 'lucide-react';
@@ -31,7 +29,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const t = translations[lang];
 
   const navItems = [
-    { id: 'dashboard' as NavItem, label: t.nav_dashboard, icon: LayoutDashboard },
     { id: 'enhancer' as NavItem, label: t.nav_enhancer, icon: Wand2 },
     { id: 'history' as NavItem, label: t.nav_history, icon: History },
     { id: 'settings' as NavItem, label: t.nav_settings, icon: SettingsIcon },
@@ -45,14 +42,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Brand Header */}
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-red-500 flex items-center justify-center text-white shadow-md shadow-red-500/20">
-              <Sparkles className="w-5 h-5" />
-            </div>
+            <img src="/logo.png" alt="PixelBoost AI" className="w-10 h-10 object-contain" />
             <div>
               <h1 className="font-bold text-lg tracking-tight text-navy-900 leading-tight">
                 PixelBoost <span className="text-brand-600 font-extrabold">AI</span>
               </h1>
-              <p className="text-xs text-slate-400 font-medium">Real-ESRGAN Vulkan</p>
+              <p className="text-xs text-slate-400 font-medium">Real-ESRGAN</p>
             </div>
           </div>
         </div>

@@ -43,8 +43,8 @@ export const api = {
         image_ids: imageIds,
         scale: settings.scale,
         model_name: settings.model,
-        output_format: settings.outputFormat,
-        face_enhance: settings.faceEnhance,
+        output_format: 'png',
+        min_height: settings.minHeightEnabled ? settings.minHeight : null,
       }),
     });
 

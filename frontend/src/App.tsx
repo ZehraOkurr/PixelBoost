@@ -3,13 +3,12 @@ import type { NavItem, Language, HealthInfo, Job } from './types';
 import { api } from './services/api';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
-import { DashboardPage } from './pages/DashboardPage';
 import { EnhancerPage } from './pages/EnhancerPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { SettingsPage } from './pages/SettingsPage';
 
 export const App: React.FC = () => {
-  const [currentNav, setCurrentNav] = useState<NavItem>('dashboard');
+  const [currentNav, setCurrentNav] = useState<NavItem>('enhancer');
   const [lang, setLang] = useState<Language>('tr'); // Turkish by default
   const [health, setHealth] = useState<HealthInfo | null>(null);
   const [historyJobs, setHistoryJobs] = useState<Job[]>([]);
@@ -64,15 +63,6 @@ export const App: React.FC = () => {
         <Header currentNav={currentNav} lang={lang} health={health} />
 
         <main className="flex-1 p-6 sm:p-8 md:p-10 overflow-y-auto">
-          {currentNav === 'dashboard' && (
-            <DashboardPage
-              onNavigate={setCurrentNav}
-              lang={lang}
-              health={health}
-              historyCount={historyJobs.reduce((sum, j) => sum + j.completed_images, 0)}
-            />
-          )}
-
           {currentNav === 'enhancer' && (
             <EnhancerPage
               lang={lang}
