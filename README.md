@@ -5,7 +5,7 @@
 <h1 align="center">PixelBoost AI</h1>
 
 <p align="center">
-  Real-ESRGAN ile yerel GPU üzerinde çalışan yapay zekâ destekli görsel büyütme (süper çözünürlük) uygulaması.
+  Real-ESRGAN ile yerel GPU üzerinde çalışan yapay zekâ destekli görsel büyütme uygulaması.
 </p>
 
 ---
